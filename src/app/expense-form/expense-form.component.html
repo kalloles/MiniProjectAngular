@@ -1,0 +1,42 @@
+<div class="container">
+  <div class="row justify-content-center">
+    <div class="col-md-6">
+      <h1 class="heading" style="text-align: center;">Expense Calculator</h1>
+      <div class="form-container">
+        <form [formGroup]="exprnseForm" (submit)="onSubmit()">
+          <div class="form-group">
+            <label for="expName">Expense Name</label>
+            <input type="text" id="expName" formControlName="expName" class="form-control" />
+          </div>
+          <div class="form-row">
+            <div class="col-md-6 mb-3">
+              <label for="validationDefault01">Amount</label>
+              <input type="text" class="form-control" id="validationDefault01" formControlName="amount" required>
+            </div>
+            <div class="col-md-6 mb-3">
+              <label for="validationDefault02">Date</label>
+              <input type="text" class="form-control" id="validationDefault02" formControlName="date" required>
+            </div>
+          </div>
+          
+          <div class="form-group">
+            <label for="expName">Paid By</label>
+            <select class="custom-select" id="validationCustom04" formControlName="paidBy" required>
+              <option selected disabled value="">Select</option>
+              <option>Employee 1</option>
+              <option>Employee 2</option>
+              <option>Employee 3</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="description">Description</label>
+            <input type="text" id="description" formControlName="description" class="form-control" />
+          </div>
+          <div class="form-group">
+            <button type="submit" class="btn btn-primary">Submit</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
