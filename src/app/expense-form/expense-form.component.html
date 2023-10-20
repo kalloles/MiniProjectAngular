@@ -1,8 +1,14 @@
-<div class="container">
-  <div class="row justify-content-center">
-    <div class="col-md-6">
+<block-ui>
+  <section class="main">
+    <div class="container py-10 h-100">
+      <div class="justify-content-center">
+          <div class="row">
+              <div class="col-12 col-lg-5 col-xl-9">
+                  <div class="card shadow-2-strong card-registration">
+                      <div class="card-body  col-md-11">
       <h1 class="heading" style="text-align: center;">Expense Calculator</h1>
-      <div class="form-container">
+      
+      
         <form [formGroup]="exprnseForm" (submit)="onSubmit()">
           <div class="form-group">
             <label for="expName">Expense Name</label>
@@ -22,7 +28,7 @@
           <div class="form-group">
             <label for="expName">Paid By</label>
             <select class="custom-select" id="validationCustom04" formControlName="paidBy" required>
-              <option selected disabled value="">Select</option>
+              <option value="0">Select</option>
               <option>Employee 1</option>
               <option>Employee 2</option>
               <option>Employee 3</option>
@@ -36,7 +42,15 @@
             <button type="submit" class="btn btn-primary">Submit</button>
           </div>
         </form>
-      </div>
+      
     </div>
   </div>
-</div>
+              </div>
+          </div>
+      </div>
+    </div>
+    
+</section>
+</block-ui>
+
+
