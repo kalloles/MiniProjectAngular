@@ -1,6 +1,8 @@
-import { Component } from '@angular/core';
-import { FormControl, FormGroup } from '@angular/forms';
+import { Component, OnInit } from '@angular/core';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
 import{BlockUI,NgBlockUI}from 'ng-block-ui';
+import { ExpenseService } from '../expense.service';
+import { Router } from '@angular/router';
 
 
 @Component({
@@ -8,51 +10,74 @@ import{BlockUI,NgBlockUI}from 'ng-block-ui';
   templateUrl: './expense-form.component.html',
   styleUrls: ['./expense-form.component.css']
 })
-export class ExpenseFormComponent {
+export class ExpenseFormComponent implements OnInit  {
   exprnseForm = new FormGroup({
     
-    expName: new FormControl(''),
+    expName: new FormControl('',[Validators.required]),
     amount: new FormControl(''),
     date: new FormControl(''),
     paidby: new FormControl(''),
     description: new FormControl(''),
 
   });
+  
   serv: any;
+  @BlockUI()
+  blockUI!: NgBlockUI;
+  expName: any;
+  amount: any;
+  date: any;
+  paidby: any;
+  description: any;
+  employeeList: any;
+  
+
+  constructor(private http: ExpenseService,private router: Router) {
+   
+  }
+  ngOnInit(): void {
+    this.getEmployeeList();
+  }
 
 onSubmit() {
 
-  if(this.exprnseForm.value.expName && 
-    this.exprnseForm.value.amount && 
-    this.exprnseForm.value.date &&
-    this.exprnseForm.value.paidby &&
-    this.exprnseForm.value.description)
-    {
-      let req={
+  let formData= {
+    expName: this.expName,
+    amount: this.amount,
+    date: this.date,
+    paidBy: parseInt(this.paidby),
+    description: this.description,
+   
+  };
+  this.http.postRequest('ExpensForm/save', formData).subscribe((response: any) => {
+      console.log(response);
+       console.log('Data saved successfully:', response);
 
-        expName:this.exprnseForm.value.expName,
-        amount:this.exprnseForm.value.amount,
-        date:this.exprnseForm.value.date,
-        paidby:this.exprnseForm.value.paidby,
-        description:this.exprnseForm.value.description,
+    
     }
+    // (error: any) => {
+    //   console.error('Error saving data:', error);
+    // }
+);
 
-    this.serv.postRequest('expense/save',req).subscribe((data: any)=>{
-      console.log(data);
-      if(data.STATUS=="true"){
-        alert('Form submission is successful......');
-        this.exprnseForm.reset();
-      }else{
-        alert('Form submission is not successful please try again');
-      }
-    });
-  }else{
-    alert('Please fill expense form......');
-  }
-  console.log(this.exprnseForm.value);
-  console.log("In expense")
-      
-    }
+}
+
+getEmployeeList(){
+  this.http.getRequest('ExpensForm/expensesByEmployee','').subscribe(
+    (data: any) => {
+     console.log(data);
+      this.employeeList = data;
+
+    })
+
+}
+
+navigateToList(){
+
+   this.router.navigate(['/expense-list']);
+
+
+}
 
 }
 
