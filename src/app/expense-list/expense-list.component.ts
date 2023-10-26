@@ -29,10 +29,11 @@ export class ExpenseListComponent {
   }
 
   getList(){
-    this.expenseService.getRequest('ExpensForm/expenses','').subscribe(
+    this.expenseService.getRequest('ExpensForm/expensesList','').subscribe(
       (data: any) => {
        console.log(data);
         this.expenseList = data;
+        
   
       })
   

@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import{BlockUI,NgBlockUI}from 'ng-block-ui';
 import { ExpenseService } from '../expense.service';
 import { Router } from '@angular/router';
@@ -11,15 +11,7 @@ import { Router } from '@angular/router';
   styleUrls: ['./expense-form.component.css']
 })
 export class ExpenseFormComponent implements OnInit  {
-  exprnseForm = new FormGroup({
-    
-    expName: new FormControl('',[Validators.required]),
-    amount: new FormControl(''),
-    date: new FormControl(''),
-    paidby: new FormControl(''),
-    description: new FormControl(''),
-
-  });
+  
   
   serv: any;
   @BlockUI()
@@ -30,12 +22,23 @@ export class ExpenseFormComponent implements OnInit  {
   paidby: any;
   description: any;
   employeeList: any;
- 
+  exprnseForm : FormGroup<any> | undefined;
+  
 
-  constructor(private http: ExpenseService,private router: Router) {
+  constructor(private http: ExpenseService,private router: Router,private fb:FormBuilder) {
    
   }
   ngOnInit(): void {
+
+    this.exprnseForm = this.fb.group({
+    
+      expName: ['',[Validators.required]],
+      amount: ["",],
+      date: ["",],
+      paidby: ["",],
+      description: ["",],
+  
+    });
     this.getEmployeeList();
   }
 
@@ -52,18 +55,18 @@ onSubmit() {
   this.http.postRequest('ExpensForm/save', formData).subscribe((response: any) => {
       console.log(response);
        console.log('Data saved successfully:', response);
+        alert('Data saved successfully');
+        this.exprnseForm?.value.reset();
 
     
     }
-    // (error: any) => {
-    //   console.error('Error saving data:', error);
-    // }
+   
 );
 
 }
 
 getEmployeeList(){
-  this.http.getRequest('ExpensForm/expensesByEmployee','').subscribe(
+  this.http.getRequest('ExpensForm/employeeList','').subscribe(
     (data: any) => {
      console.log(data);
       this.employeeList = data;

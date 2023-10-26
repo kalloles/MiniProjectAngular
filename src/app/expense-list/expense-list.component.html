@@ -1,5 +1,5 @@
 <div class="container">
-    <h1>Expense List</h1>
+    <h1 class="text-center">Expense List</h1>
     <button class="btn btn-primary btn-md btn_one1 go-back-button" (click)="navigateToHome()">Go Back</button>
     <table class="table table-striped table-bordered">
       <thead class="table-dark">
@@ -18,7 +18,7 @@
           <td>{{ expense.expName }}</td>
           <td>{{ expense.amount }}</td>
           <td>{{ expense.date }}</td>
-          <td>{{ expense.paidby }}</td>
+          <td>{{ expense.paidName }}</td>
           <td>{{ expense.description }}</td>
         </tr>
       </tbody>
