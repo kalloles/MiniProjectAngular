@@ -8,6 +8,7 @@ import {FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule} from '@angular/common/http';
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { ExpenseListComponent } from './expense-list/expense-list.component';
+import { MatDialogModule} from '@angular/material/dialog';
 
 @NgModule({
   declarations: [
@@ -20,8 +21,10 @@ import { ExpenseListComponent } from './expense-list/expense-list.component';
     BrowserModule,
     AppRoutingModule,
     ReactiveFormsModule,
-   HttpClientModule,
+    HttpClientModule,
    FormsModule,
+   MatDialogModule,
+   
    
   ],
   providers: [],

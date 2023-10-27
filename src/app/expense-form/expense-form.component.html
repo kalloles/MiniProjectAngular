@@ -6,7 +6,8 @@
           <div class="col-12 col-lg-5 col-xl-9">
             <div class="card shadow-2-strong card-registration">
               <div class="card-body col-md-11">
-                <h1 class="heading" style="text-align: center;">Expense Calculator</h1>
+                <h1 class="heading" style="text-align: center;"*ngIf="textFlag==0">Expense Calculator</h1>
+                <h1 class="heading" style="text-align: center;"*ngIf="textFlag==1">Update Expense</h1>
                 <button class="btn btn-primary btn-md btn_one1 go-back-button" (click)="navigateToList()">Expenses List</button>
                 <form (ngSubmit)="onSubmit()">
                   <div class="form-group">
@@ -19,12 +20,13 @@
                   </div>
                   <div class="form-group">
                     <label for="date">Date</label>
-                    <input type="date" id="date" name="date" [(ngModel)]="date" class="form-control" required>
+                    <input type="date" id="date" name="date" [(ngModel)]="date" class="form-control" [max]="getCurrentDate()" required>
                   </div>
+                  
                   <div class="form-group">
                     <label for="paidby">Paid By</label>
-                    <select id="paidby" name="paidby" [(ngModel)]="paidby" class="form-control" required>
-                      
+                    <select id="paidby" name="paidby" [(ngModel)]="paidby" class="form-control"  required>
+                      <option [value]="1" disabled selected>Select</option>
                       <option *ngFor="let emp of  employeeList" value="{{emp.id}}">{{emp.employeeName}}</option>
                      </select>
                   </div>
@@ -32,7 +34,8 @@
                     <label for="description">Description</label>
                     <textarea id="description" name="description" [(ngModel)]="description" class="form-control" required></textarea>
                   </div>
-                  <button type="submit" class="btn btn-primary">Submit</button>
+                  <button type="submit" class="btn btn-primary"*ngIf="textFlag==0">Submit</button>
+                  <button type="submit" class="btn btn-primary"*ngIf="textFlag==1">Update</button>
                 </form>
               </div>
             </div>

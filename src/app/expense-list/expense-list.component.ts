@@ -48,4 +48,7 @@ export class ExpenseListComponent {
     });
     return totalAmount;
   }
+  editExpense(){
+    this.router.navigate(['/expense'])
+  }
 }

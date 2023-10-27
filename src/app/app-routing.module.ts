@@ -4,6 +4,7 @@ import { ExpenseFormComponent } from './expense-form/expense-form.component';
 import { ExpenseListComponent } from './expense-list/expense-list.component';
 
 
+
 const routes: Routes = [
   {path: '',redirectTo:'expense',pathMatch:'full'},
   {path: 'expense',component:ExpenseFormComponent},

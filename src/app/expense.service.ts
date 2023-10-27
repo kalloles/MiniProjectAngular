@@ -1,6 +1,7 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs/internal/Observable';
+import Swal from 'sweetalert2';
 
 const httpOptions = {
   headers: new HttpHeaders({
@@ -18,9 +19,7 @@ export class ExpenseService {
  
   constructor(private http: HttpClient) { }
 
-//   postRequest(arg0: string, formData: { expName: string; amount: number; date: string; paidby: string;  description: string; }) {
-//     return this.http.post(`${this.apiUrl}/save`, formData);
-// }
+
 
 postRequest(url: string, param: {}) {
   return this.http.post(this.apiUrl + url, param, httpOptions)
@@ -36,6 +35,18 @@ getRequest(url: string, param: {}) {
  return this.http.get(this.apiUrl + url, param)
    
 }
+isTokenExpired() {
+  const Toast = Swal.mixin({
+    toast: true,
+    position: 'top-right',
+    iconColor: 'white',
+    customClass: {
+      popup: 'colored-toast'
+    },
+    showConfirmButton: false,
+    timer: 2500,
+    timerProgressBar: true
+  })
 
-
+}
 }
