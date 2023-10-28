@@ -90,6 +90,7 @@ export class ExpenseFormComponent implements OnInit {
       description: this.description,
 
     };
+    if(this.textFlag ===0){
     this.http.postRequest('ExpensForm/save', formData).subscribe((response: any) => {
       console.log(response);
       console.log('Data saved successfully:', response);
@@ -97,14 +98,14 @@ export class ExpenseFormComponent implements OnInit {
       this.Fromreset();
 
     } );
-
+  }else if(this.textFlag ===1){
     this.http.postRequest('ExpensForm/Update', formData).subscribe((data: any) => {
       console.log(data);
       Swal.fire("Thank you .... ", "Submitted successfully", "success")
       this.Fromreset();
-    })
+    });
 
-
+  }
   }
 
   getEmployeeList() {
@@ -138,27 +139,19 @@ export class ExpenseFormComponent implements OnInit {
     }
   
     this.http.postRequest('ExpensForm/getEditExpense',request).subscribe(
-      (data =>{
-        this.updateExpenseflag =1;
+      (data) =>{
+        this.textFlag =1;
         this.expenseInfo = data;
-        this.exprnseForm?.setValue({
-          expName : this.expenseInfo['expName'],
-          amount : this.expenseInfo['amount'],
-          date : this.expenseInfo['date'],
-          paidby : this.expenseInfo['paidby'],
+        //this.exprnseForm?.setValue({
+          this.expName = this.expenseInfo['Status']['expName'];
+          this.amount = this.expenseInfo['Status']['amount'];
+          this.date = this.expenseInfo['Status']['date'];
+          this.paidby = this.expenseInfo['Status']['paidby'];
 
-        })
-      })
-      
-    )
+        }
+        );
+   
   }
-  
-    // fetchDataByExpenseId(expenseId :number){
-    //   let request ={
-    //     expenseId : this.
-    //   }
-
-    // }
 
 }
 
