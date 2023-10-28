@@ -9,6 +9,7 @@ import { HttpClientModule} from '@angular/common/http';
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { ExpenseListComponent } from './expense-list/expense-list.component';
 import { MatDialogModule} from '@angular/material/dialog';
+import { RouterModule } from '@angular/router';
 
 @NgModule({
   declarations: [
@@ -24,6 +25,7 @@ import { MatDialogModule} from '@angular/material/dialog';
     HttpClientModule,
    FormsModule,
    MatDialogModule,
+   RouterModule,
    
    
   ],

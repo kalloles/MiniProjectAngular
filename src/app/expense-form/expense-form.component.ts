@@ -2,9 +2,11 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { BlockUI, NgBlockUI } from 'ng-block-ui';
 import { ExpenseService } from '../expense.service';
-import { Router } from '@angular/router';
+import {NavigationExtras, Router } from '@angular/router';
 import Swal from 'sweetalert2';
 import { MatDialog } from '@angular/material/dialog';
+import { HttpClient } from '@angular/common/http';
+import { pipe } from 'rxjs';
 // import { MatDatepickerInputEvent } from '@angular/material/datepicker';
 
 @Component({
@@ -38,15 +40,24 @@ export class ExpenseFormComponent implements OnInit {
   textFlag: any = 0;
   updateExpenseflag: number =0;
   expenseInfo: any;
-
+  flag: number = 0;
+  expenseId!: number;
 
   constructor(private http: ExpenseService, private router: Router, private fb: FormBuilder,
-    public dialog: MatDialog) {
+    public dialog: MatDialog, private https: HttpClient) {
 
-      
+    
+      this.textFlag = 0;
+      if(this.router.getCurrentNavigation()?.extras.state){
+        // this.expenseId = this.router.getCurrentNavigation().extras.state.id | null;
+        this.expenseId = this.router.getCurrentNavigation()?.extras?.state?.['id'];
+        this.getEditProfile(this.expenseId);
 
+        this.textFlag =1;
+
+      }
   }
-  ngOnInit(): void {
+  ngOnInit(): void {  
 
     this.exprnseForm = this.fb.group({
 
@@ -85,13 +96,7 @@ export class ExpenseFormComponent implements OnInit {
       Swal.fire("Thank you .... ", "Submitted successfully", "success")
       this.Fromreset();
 
-    },
-      // (error) => {
-      //   console.error('Error:', error);
-      //   Swal.fire('Error: Date not submitted or invalid', 'Close')
-      // }
-
-    );
+    } );
 
     this.http.postRequest('ExpensForm/Update', formData).subscribe((data: any) => {
       console.log(data);
@@ -116,8 +121,6 @@ export class ExpenseFormComponent implements OnInit {
   navigateToList() {
 
     this.router.navigate(['/expense-list']);
-
-
   }
 
   getCurrentDate(): string {
@@ -134,7 +137,7 @@ export class ExpenseFormComponent implements OnInit {
       "expenseId": id
     }
   
-    this.http.postRequest('ExpensForm/getExpense',request).subscribe(
+    this.http.postRequest('ExpensForm/getEditExpense',request).subscribe(
       (data =>{
         this.updateExpenseflag =1;
         this.expenseInfo = data;
@@ -149,9 +152,7 @@ export class ExpenseFormComponent implements OnInit {
       
     )
   }
-  // get f(){
-  //   return this.exprnseForm?.controls;
-  // }
+  
     // fetchDataByExpenseId(expenseId :number){
     //   let request ={
     //     expenseId : this.

@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { ExpenseService } from '../expense.service';
-import { Router } from '@angular/router';
+import { NavigationExtras, Router } from '@angular/router';
 
 @Component({
   selector: 'app-expense-list',
@@ -8,13 +8,16 @@ import { Router } from '@angular/router';
   styleUrls: ['./expense-list.component.css']
 })
 export class ExpenseListComponent {
+  
   expenses: any[] = []; 
+  id: any;
   expName: any;
   amount: any;
   date: any;
   paidby: any;
   description: any;
   expenseList: any[] = [];
+expenseFlag: any;
   // expenseList: any;
 
 
@@ -32,8 +35,7 @@ export class ExpenseListComponent {
     this.expenseService.getRequest('ExpensForm/expensesList','').subscribe(
       (data: any) => {
        console.log(data);
-        this.expenseList = data;
-        
+        this.expenseList = data;   
   
       })
   
@@ -48,7 +50,10 @@ export class ExpenseListComponent {
     });
     return totalAmount;
   }
-  editExpense(){
-    this.router.navigate(['/expense'])
+  editExpense(id:number){    
+    const navigationExtras: NavigationExtras = { state: { id: id } };
+    this.router.navigate(['/expense',navigationExtras],navigationExtras)
+    // localStorage.setItem("ServiceId", id);
   }
 }
+
