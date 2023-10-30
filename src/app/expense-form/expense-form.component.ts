@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { BlockUI, NgBlockUI } from 'ng-block-ui';
 import { ExpenseService } from '../expense.service';
-import {NavigationExtras, Router } from '@angular/router';
+import { NavigationExtras, Router } from '@angular/router';
 import Swal from 'sweetalert2';
 import { MatDialog } from '@angular/material/dialog';
 import { HttpClient } from '@angular/common/http';
@@ -38,26 +38,27 @@ export class ExpenseFormComponent implements OnInit {
   employeeList: any;
   exprnseForm: FormGroup<any> | undefined;
   textFlag: any = 0;
-  updateExpenseflag: number =0;
+  updateExpenseflag: number = 0;
   expenseInfo: any;
   flag: number = 0;
-  expenseId!: number;
+  expenseId: any;
+  paidBy: any;
 
   constructor(private http: ExpenseService, private router: Router, private fb: FormBuilder,
-    public dialog: MatDialog, private https: HttpClient) {
+    public dialog: MatDialog) {
 
-    
-      this.textFlag = 0;
-      if(this.router.getCurrentNavigation()?.extras.state){
-        // this.expenseId = this.router.getCurrentNavigation().extras.state.id | null;
-        this.expenseId = this.router.getCurrentNavigation()?.extras?.state?.['id'];
-        this.getEditProfile(this.expenseId);
 
-        this.textFlag =1;
+    this.textFlag = 0;
+    if (this.router.getCurrentNavigation()?.extras.state) {
+      // this.expenseId = this.router.getCurrentNavigation().extras.state.id | null;
+      this.expenseId = this.router.getCurrentNavigation()?.extras?.state?.['id'];
+      this.getEditProfile(this.expenseId);
 
-      }
+      this.textFlag = 1;
+
+    }
   }
-  ngOnInit(): void {  
+  ngOnInit(): void {
 
     this.exprnseForm = this.fb.group({
 
@@ -90,22 +91,32 @@ export class ExpenseFormComponent implements OnInit {
       description: this.description,
 
     };
-    if(this.textFlag ===0){
-    this.http.postRequest('ExpensForm/save', formData).subscribe((response: any) => {
-      console.log(response);
-      console.log('Data saved successfully:', response);
-      Swal.fire("Thank you .... ", "Submitted successfully", "success")
-      this.Fromreset();
+    if (this.textFlag == 0) {
+      this.http.postRequest('ExpensForm/save', formData).subscribe((response: any) => {
+        console.log(response);
+        console.log('Data saved successfully:', response);
+        Swal.fire("Thank you .... ", "Submitted successfully", "success")
+        this.Fromreset();
 
-    } );
-  }else if(this.textFlag ===1){
-    this.http.postRequest('ExpensForm/Update', formData).subscribe((data: any) => {
-      console.log(data);
-      Swal.fire("Thank you .... ", "Submitted successfully", "success")
-      this.Fromreset();
-    });
+      });
+    } else if (this.textFlag == 1) {
 
-  }
+      let formData = {
+        id:this.expenseId,
+        expName: this.expName,
+        amount: this.amount,
+        date: this.date,
+        paidBy: parseInt(this.paidby),
+        description: this.description,
+  
+      };
+      this.http.postRequest('ExpensForm/Update', formData).subscribe((data: any) => {
+        console.log(data);
+        Swal.fire("Thank you .... ", "Submitted successfully", "success")
+        this.Fromreset();
+      });
+
+    }
   }
 
   getEmployeeList() {
@@ -132,27 +143,45 @@ export class ExpenseFormComponent implements OnInit {
     return `${year}-${month}-${day}`;
   }
 
-  getEditProfile(id: any){
-    this.http.isTokenExpired();
+  getEditProfile(id:any)
+  {
+    console.log(id);
     let request = {
-      "expenseId": id
+      id: parseInt(id)
     }
-  
-    this.http.postRequest('ExpensForm/getEditExpense',request).subscribe(
-      (data) =>{
-        this.textFlag =1;
-        this.expenseInfo = data;
-        //this.exprnseForm?.setValue({
-          this.expName = this.expenseInfo['Status']['expName'];
-          this.amount = this.expenseInfo['Status']['amount'];
-          this.date = this.expenseInfo['Status']['date'];
-          this.paidby = this.expenseInfo['Status']['paidby'];
 
-        }
-        );
-   
+    // this.http.postRequest('ExpensForm/getEditExpense', request).subscribe(
+    //   (data:any) => {
+    //     this.textFlag = 1;
+    //     console.log(data);
+    //     this.expenseInfo = data;
+    //     console.log(data.status.paidBy.id)
+    //     this.paidBy=data.status.paidBy.id;
+    //     this.exprnseForm?.setValue({
+    //       expName : this.expenseInfo['expName'],
+    //       amount : this.expenseInfo['amount'],
+    //       date : this.expenseInfo['date'],
+    //       paidby :  this.paidBy,
+    //       description : this.expenseInfo['description'],
+
+    //   });
+    
+    //   })}
+    this.http.postRequest('ExpensForm/getEditExpense', request).subscribe(
+      (data:any) => {
+        console.log('get Edit Data:', data);
+        this.textFlag = 1;
+        this.expenseInfo = data.status;
+        console.log('get Edit Data:', data.status);
+        // console.log(data.paidBy.id)
+        // this.paidBy=data.paidBy.id;
+        this.expName = this.expenseInfo['status']['expName'];
+        this.amount = this.expenseInfo['status']['amount'];
+        this.date = this.expenseInfo['status']['date'];
+        this.paidBy = this.expenseInfo['status']['paidBy']['id'];
+        this.description = this.expenseInfo['status']['description'];
+       
+      }
+    );
   }
-
 }
-
-
